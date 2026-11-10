@@ -1,11 +1,8 @@
 """DataForSEO 客户端（零依赖）。
 
-凭据来源（按优先级）：
-  1. 环境变量 SEOGEO_AUTH_DIR 指向目录下的 dataforseo_conf.json
-  2. C:\\scripts\\seogeo-auth-config\\dataforseo_conf.json
-
-配置字段：API_login / API_password（可选 Base64_format）。
-交付给客户时只替换该配置文件，代码不用改。
+凭据由词真语 Deploy 统一管理（禁止硬编码）：
+  CIZHENYU_AUTH_DIR / SEOGEO_AUTH_DIR 下 dataforseo.json 或 dataforseo_conf.json
+  字段：API_login / API_password（或 login / password），可选 Base64_format。
 """
 
 from __future__ import annotations
@@ -17,12 +14,11 @@ import ssl
 import time
 import urllib.error
 import urllib.request
-from pathlib import Path
+
+import cizhenyu_auth
 
 BASE = "https://api.dataforseo.com"
 SANDBOX_BASE = "https://sandbox.dataforseo.com"
-DEFAULT_AUTH_DIR = Path(r"C:\scripts\seogeo-auth-config")
-CONF_NAME = "dataforseo_conf.json"
 
 
 class DataForSeoError(RuntimeError):
@@ -34,21 +30,18 @@ def base_url() -> str:
     return SANDBOX_BASE if os.environ.get("SEOGEO_DFS_SANDBOX", "").strip().lower() in ("1", "true", "yes") else BASE
 
 
-def auth_dir() -> Path:
-    env = os.environ.get("SEOGEO_AUTH_DIR", "").strip()
-    return Path(env) if env else DEFAULT_AUTH_DIR
-
-
 def load_auth() -> str:
-    path = auth_dir() / CONF_NAME
-    if not path.exists():
-        raise DataForSeoError(f"找不到 DataForSEO 配置：{path}")
-    conf = json.loads(path.read_text(encoding="utf-8-sig"))
-    if conf.get("Base64_format"):
-        return conf["Base64_format"].strip()
-    login, password = conf.get("API_login"), conf.get("API_password")
+    try:
+        conf = cizhenyu_auth.read_json("dataforseo.json", "dataforseo_conf.json")
+    except cizhenyu_auth.AuthError as exc:
+        raise DataForSeoError(str(exc)) from exc
+    b64 = cizhenyu_auth.first_str(conf, "Base64_format", "base64")
+    if b64:
+        return b64
+    login = cizhenyu_auth.first_str(conf, "API_login", "login", "username")
+    password = cizhenyu_auth.first_str(conf, "API_password", "password")
     if not login or not password:
-        raise DataForSeoError("dataforseo_conf.json 缺少 API_login / API_password")
+        raise DataForSeoError("dataforseo 配置缺少 API_login / API_password")
     return base64.b64encode(f"{login}:{password}".encode()).decode()
 
 
