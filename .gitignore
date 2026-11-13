@@ -17,3 +17,4 @@ __pycache__/
 READY.txt
 mcp_launcher.py
 .DS_Store
+/__pycache__
