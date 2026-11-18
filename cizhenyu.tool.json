@@ -1,0 +1,57 @@
+{
+  "protocolVersion": 1,
+  "id": "dataforseo",
+  "name": "DataForSEO",
+  "category": "seo",
+  "tier": "recommended",
+  "description": "SEO / SERP / 关键词数据",
+  "source": {
+    "github": "https://github.com/youcizi-art/cizhenyu_seogeo_dataforseo",
+    "defaultRef": "master"
+  },
+  "install": {
+    "runtime": "python",
+    "steps": [],
+    "readyCheck": ["server.py"]
+  },
+  "credentials": {
+    "key": "dataforseo",
+    "fields": [
+      {
+        "type": "input",
+        "name": "API_login",
+        "label": "Login",
+        "required": true,
+        "tip": "DataForSEO API Access 中的 Login（通常是邮箱）",
+        "link": {
+          "label": "DataForSEO 控制台",
+          "url": "https://app.dataforseo.com/"
+        }
+      },
+      {
+        "type": "password",
+        "name": "API_password",
+        "label": "Password",
+        "required": true,
+        "tip": "API 密码，不是网页登录密码"
+      }
+    ],
+    "sidecar": "dataforseo.json"
+  },
+  "env": [
+    { "name": "CIZHENYU_AUTH_DIR", "from": "credentialsDir" },
+    { "name": "SEOGEO_AUTH_DIR", "from": "credentialsDir" }
+  ],
+  "mcp": {
+    "transport": "stdio",
+    "command": "python",
+    "args": ["server.py"],
+    "cwd": "."
+  },
+  "guides": { "setup": "guides/setup.md" },
+  "health": {
+    "requireCredentials": true,
+    "requireReadyFiles": ["server.py"]
+  },
+  "actions": []
+}
