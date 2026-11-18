@@ -24,7 +24,7 @@ def auth_dir() -> Path:
             return Path(raw)
     raise AuthError(
         "未设置 CIZHENYU_AUTH_DIR / SEOGEO_AUTH_DIR。"
-        "请通过词真语 Deploy 运营台导出 MCP，由软件注入工作目录 credentials。"
+        "请通过磁帧鱼 Deploy 运营台导出 MCP，由软件注入工作目录 credentials。"
     )
 
 

@@ -1,6 +1,6 @@
 """DataForSEO 客户端（零依赖）。
 
-凭据由词真语 Deploy 统一管理（禁止硬编码）：
+凭据由磁帧鱼 Deploy 统一管理（禁止硬编码）：
   CIZHENYU_AUTH_DIR / SEOGEO_AUTH_DIR 下 dataforseo.json 或 dataforseo_conf.json
   字段：API_login / API_password（或 login / password），可选 Base64_format。
 """
