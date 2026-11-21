@@ -4,7 +4,7 @@
   "name": "DataForSEO",
   "category": "seo",
   "tier": "recommended",
-  "description": "SEO / SERP / 关键词数据",
+  "description": "SEO / SERP / keyword data",
   "source": {
     "github": "https://github.com/youcizi-art/cizhenyu_seogeo_dataforseo",
     "defaultRef": "master"
@@ -12,7 +12,9 @@
   "install": {
     "runtime": "python",
     "steps": [],
-    "readyCheck": ["server.py"]
+    "readyCheck": [
+      "server.py"
+    ]
   },
   "credentials": {
     "key": "dataforseo",
@@ -22,9 +24,9 @@
         "name": "API_login",
         "label": "Login",
         "required": true,
-        "tip": "DataForSEO API Access 中的 Login（通常是邮箱）",
+        "tip": "Login from DataForSEO API Access (usually your email)",
         "link": {
-          "label": "DataForSEO 控制台",
+          "label": "DataForSEO console",
           "url": "https://app.dataforseo.com/"
         }
       },
@@ -33,25 +35,58 @@
         "name": "API_password",
         "label": "Password",
         "required": true,
-        "tip": "API 密码，不是网页登录密码"
+        "tip": "API password, not the website login password"
       }
     ],
     "sidecar": "dataforseo.json"
   },
   "env": [
-    { "name": "CIZHENYU_AUTH_DIR", "from": "credentialsDir" },
-    { "name": "SEOGEO_AUTH_DIR", "from": "credentialsDir" }
+    {
+      "name": "CIZHENYU_AUTH_DIR",
+      "from": "credentialsDir"
+    },
+    {
+      "name": "SEOGEO_AUTH_DIR",
+      "from": "credentialsDir"
+    }
   ],
   "mcp": {
     "transport": "stdio",
     "command": "python",
-    "args": ["server.py"],
+    "args": [
+      "server.py"
+    ],
     "cwd": "."
   },
-  "guides": { "setup": "guides/setup.md" },
+  "guides": {
+    "setup": "guides/setup.md",
+    "setupByLocale": {
+      "zh-CN": "guides/setup.md",
+      "zh": "guides/setup.md",
+      "en": "guides/setup.en.md",
+      "en-US": "guides/setup.en.md"
+    }
+  },
   "health": {
     "requireCredentials": true,
-    "requireReadyFiles": ["server.py"]
+    "requireReadyFiles": [
+      "server.py"
+    ]
   },
-  "actions": []
+  "actions": [],
+  "defaultLocale": "en",
+  "i18n": {
+    "zh-CN": {
+      "description": "SEO / SERP / 关键词数据",
+      "fields": {
+        "API_login": {
+          "tip": "DataForSEO API Access 中的 Login（通常是邮箱）",
+          "linkLabel": "DataForSEO 控制台"
+        },
+        "API_password": {
+          "tip": "API 密码，不是网页登录密码"
+        }
+      }
+    }
+  }
 }
